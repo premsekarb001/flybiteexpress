@@ -98,15 +98,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCart, onOpenLiveTracker })
             {/* Right Action Icons & Active Order Tracker */}
             <div className="flex items-center space-x-3">
               
-              {/* System Health CTO Metric */}
-              <button
-                onClick={() => setIsHealthModalOpen(true)}
-                className="hidden sm:flex items-center space-x-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold px-3 py-2 rounded-2xl transition-all"
-                title="System Health & SLA Status"
-              >
-                <Activity className="w-3.5 h-3.5 animate-pulse" />
-                <span>Health 99.99%</span>
-              </button>
+              {/* System Health CTO Metric (Only visible to SuperAdmin) */}
+              {activeRole === 'admin' && (
+                <button
+                  onClick={() => setIsHealthModalOpen(true)}
+                  className="hidden sm:flex items-center space-x-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold px-3 py-2 rounded-2xl transition-all"
+                  title="System Health & SLA Status"
+                >
+                  <Activity className="w-3.5 h-3.5 animate-pulse" />
+                  <span>Health 99.99%</span>
+                </button>
+              )}
 
               {/* Active Order Live Tracker Launcher */}
               {activeOrder && activeOrder.status !== 'delivered' && (
