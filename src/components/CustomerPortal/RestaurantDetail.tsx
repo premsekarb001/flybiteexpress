@@ -124,7 +124,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({ restaurant, 
                   className="glass-card p-5 rounded-2xl border border-slate-800 flex justify-between gap-4 hover:border-slate-700 transition-all shadow-md"
                 >
                   <div className="space-y-2 flex-1">
-                    {/* Veg / Non-Veg Marker & Spicy Meter */}
+                    {/* FSSAI Veg / Non-Veg Marker & Spicy Meter */}
                     <div className="flex items-center space-x-2">
                       <div
                         className={`w-4 h-4 rounded-sm border-2 flex items-center justify-center p-0.5 ${

@@ -3,7 +3,7 @@ import { Restaurant, DeliveryMode } from '../../types';
 import { MOCK_RESTAURANTS } from '../../data/mockData';
 import { DELIVERY_MODE_CONFIGS } from '../../services/deliveryLogistics';
 import { useCart } from '../../context/CartContext';
-import { Search, Star, Zap, ShieldCheck, Flame, Leaf, Compass, Tag, Clock, Award, ChevronRight, Copy, Check } from 'lucide-react';
+import { Search, Star, Zap, ShieldCheck, Leaf, Compass, Tag, ChevronRight, Copy, Check } from 'lucide-react';
 
 interface RestaurantListProps {
   onSelectRestaurant: (restaurant: Restaurant) => void;
@@ -22,7 +22,6 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
     { name: 'Biryani', icon: '🍲' },
     { name: 'South Indian', icon: '🥞' },
     { name: 'North Indian', icon: '🥘' },
-    { name: 'Chaat', icon: '🥗' },
     { name: 'Pure Veg', icon: '🌱' }
   ];
 
@@ -56,7 +55,7 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
   return (
     <div className="space-y-8">
       
-      {/* Hero Banner for Indian Multi-Modal & Drone Delivery */}
+      {/* Hero Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-orange-950/70 to-slate-950 border border-orange-500/40 p-8 sm:p-10 shadow-2xl glow-orange">
         <div className="absolute right-0 top-0 -mt-16 -mr-16 w-96 h-96 bg-orange-500/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute left-1/3 bottom-0 -mb-16 w-64 h-64 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -103,7 +102,6 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
                 })}
               </div>
 
-              {/* Selected Mode Quick Specs */}
               <div className="bg-slate-900/80 p-3 rounded-2xl border border-slate-800 flex items-center justify-between text-xs text-slate-300 max-w-xl">
                 <span>{previewCfg.icon} <strong className="text-white">{previewCfg.title}</strong>: {previewCfg.description}</span>
                 <span className="bg-cyan-500/20 text-cyan-400 font-extrabold px-2 py-0.5 rounded text-[10px] shrink-0 ml-2">
@@ -121,13 +119,13 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
                 <span>Welcome Promo</span>
               </div>
               <span className="bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded text-[10px]">
-                50% OFF
+                ₹150 OFF
               </span>
             </div>
 
             <div>
               <p className="text-3xl font-black text-white">FLYBITE50</p>
-              <p className="text-xs text-slate-300">Save ₹150 on your first Air Express or Rider Order</p>
+              <p className="text-xs text-slate-300">Save ₹150 on your first Air Express or Rider Order (Min ₹300)</p>
             </div>
 
             <button
@@ -147,15 +145,13 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
               )}
             </button>
 
-            <p className="text-[10px] text-slate-400 text-center">Auto-applied in cart • Valid across all verified kitchens</p>
+            <p className="text-[10px] text-slate-400 text-center">Valid across all verified kitchens in Bangalore & NCR</p>
           </div>
         </div>
       </div>
 
       {/* Filter Bar & Search */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 glass-panel p-4 rounded-2xl border border-slate-800">
-        
-        {/* Search Input */}
         <div className="relative w-full md:w-80">
           <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
           <input
@@ -167,7 +163,6 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
           />
         </div>
 
-        {/* Cuisine Filter Pills */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           {cuisines.map((c) => (
             <button
@@ -184,7 +179,6 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
             </button>
           ))}
 
-          {/* Pure Veg Toggle */}
           <button
             onClick={() => setPureVegOnly(!pureVegOnly)}
             className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
@@ -209,7 +203,6 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
               onClick={() => onSelectRestaurant(restaurant)}
               className="group glass-card glass-card-hover rounded-2xl overflow-hidden border border-slate-800 hover:border-orange-500/50 transition-all duration-300 cursor-pointer shadow-xl"
             >
-              {/* Image & Badges */}
               <div className="relative h-48 overflow-hidden">
                 <img
                   src={restaurant.image}
@@ -218,7 +211,6 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
 
-                {/* FSSAI & Pure Veg Badge */}
                 <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
                   <div className="bg-slate-950/90 backdrop-blur-md px-2.5 py-1 rounded-lg border border-slate-700/80 flex items-center space-x-1.5 text-[11px] text-slate-300">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
@@ -232,7 +224,6 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
                   )}
                 </div>
 
-                {/* Drone Express Badge */}
                 {restaurant.dronePadAvailable && (
                   <div className="absolute top-3 right-3 bg-cyan-400 text-slate-950 font-black px-2.5 py-1 rounded-lg text-[11px] shadow-lg flex items-center space-x-1">
                     <Zap className="w-3.5 h-3.5 fill-slate-950" />
@@ -240,14 +231,12 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
                   </div>
                 )}
 
-                {/* Rating */}
                 <div className="absolute bottom-3 left-3 flex items-center space-x-1 bg-emerald-500 text-slate-950 font-black text-xs px-2.5 py-1 rounded-lg">
                   <Star className="w-3.5 h-3.5 fill-slate-950" />
                   <span>{restaurant.rating}</span>
                 </div>
               </div>
 
-              {/* Content */}
               <div className="p-5 space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
@@ -272,7 +261,6 @@ export const RestaurantList: React.FC<RestaurantListProps> = ({ onSelectRestaura
                   ))}
                 </div>
 
-                {/* Quick Menu Highlight Pill */}
                 <div className="bg-slate-900/60 p-2 rounded-xl text-[11px] text-slate-400 border border-slate-800/60 flex items-center justify-between">
                   <span className="truncate">Top Dish: <strong className="text-white font-bold">{restaurant.menu[0]?.name}</strong></span>
                   <ChevronRight className="w-3.5 h-3.5 text-orange-400 shrink-0" />

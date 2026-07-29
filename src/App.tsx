@@ -1,40 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider, useCart } from './context/CartContext';
-import { OrderProvider } from './context/OrderContext';
-
+import { OrderProvider, useOrders } from './context/OrderContext';
 import { Navbar } from './components/Navbar';
 import { RestaurantList } from './components/CustomerPortal/RestaurantList';
 import { RestaurantDetail } from './components/CustomerPortal/RestaurantDetail';
 import { CartDrawer } from './components/CustomerPortal/CartDrawer';
 import { UPIPaymentModal } from './components/CustomerPortal/UPIPaymentModal';
 import { LiveOrderTracker } from './components/DroneLogistics/LiveOrderTracker';
-
 import { RestaurantDashboard } from './components/RestaurantPortal/RestaurantDashboard';
 import { FleetControlDashboard } from './components/DronePortal/FleetControlDashboard';
 import { AdminDashboard } from './components/AdminPortal/AdminDashboard';
 import { ToastContainer, ToastMessage } from './components/Toast';
-
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Restaurant } from './types';
-import { ShieldCheck, Zap } from 'lucide-react';
 
-const AppContent: React.FC = () => {
+const MainAppContent: React.FC = () => {
   const { activeRole } = useAuth();
   const { toastNotice, setToastNotice } = useCart();
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [isLiveTrackerOpen, setIsLiveTrackerOpen] = useState(false);
+
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   useEffect(() => {
     if (toastNotice) {
-      const newToast: ToastMessage = {
-        id: `toast-${Date.now()}`,
-        type: 'info',
-        text: toastNotice
-      };
-      setToasts((prev) => [newToast, ...prev].slice(0, 3));
+      const id = `toast-${Date.now()}`;
+      setToasts((prev) => [...prev, { id, text: toastNotice }]);
       setToastNotice(null);
     }
   }, [toastNotice, setToastNotice]);
@@ -72,6 +67,18 @@ const AppContent: React.FC = () => {
         </main>
       </div>
 
+      {/* Footer */}
+      <footer className="border-t border-slate-900 bg-slate-950/90 py-8 text-center text-xs text-slate-500 space-y-2">
+        <div className="flex justify-center space-x-4">
+          <span>DGCA Air Corridor Verified</span>
+          <span>•</span>
+          <span>FSSAI Hygiene Certified</span>
+          <span>•</span>
+          <span>NPCI 256-Bit SSL UPI</span>
+        </div>
+        <p>© 2026 FlyBite Express India. Multi-Modal Ground &amp; Drone Air Express Food Delivery.</p>
+      </footer>
+
       {/* Global Toast Container */}
       <ToastContainer toasts={toasts} onDismiss={handleDismissToast} />
 
@@ -98,42 +105,22 @@ const AppContent: React.FC = () => {
         isOpen={isLiveTrackerOpen}
         onClose={() => setIsLiveTrackerOpen(false)}
       />
-
-      {/* Indian Market Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-8 px-4 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-3">
-            <span className="font-extrabold text-white text-sm">FlyBite Express India</span>
-            <span>•</span>
-            <span className="flex items-center gap-1 text-emerald-400">
-              <ShieldCheck className="w-3.5 h-3.5" /> FSSAI Certified
-            </span>
-            <span>•</span>
-            <span className="flex items-center gap-1 text-cyan-400">
-              <Zap className="w-3.5 h-3.5" /> DGCA Airspace Green Corridor
-            </span>
-          </div>
-
-          <div className="flex items-center space-x-4 text-slate-400">
-            <span>UPI / GPay / PhonePe / Paytm Supported</span>
-            <span>© 2026 FlyBite Technologies Pvt. Ltd.</span>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
 
-export const App: React.FC = () => {
+export function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <OrderProvider>
-          <AppContent />
-        </OrderProvider>
-      </CartProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <CartProvider>
+          <OrderProvider>
+            <MainAppContent />
+          </OrderProvider>
+        </CartProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
-};
+}
 
 export default App;

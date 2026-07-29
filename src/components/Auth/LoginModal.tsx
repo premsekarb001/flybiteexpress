@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { X, ShieldCheck, Smartphone, Lock, CheckCircle2, UserCheck, KeyRound } from 'lucide-react';
+import { X, ShieldCheck, Smartphone, Lock, CheckCircle2, UserCheck, KeyRound, Info } from 'lucide-react';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -8,7 +8,7 @@ interface LoginModalProps {
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-  const { loginCustomerOTP, verifyOTP, loginAdminPassword, otpSent, pendingPhone } = useAuth();
+  const { loginCustomerOTP, verifyOTP, loginAdminPassword, otpSent } = useAuth();
   const [tab, setTab] = useState<'customer' | 'admin'>('customer');
   
   // Customer OTP State
@@ -159,7 +159,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
                   type="submit"
                   className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-black text-xs py-3 rounded-xl shadow-lg transition-all"
                 >
-                  Verify & Log In
+                  Verify &amp; Log In
                 </button>
               </form>
             )}

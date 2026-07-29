@@ -39,7 +39,7 @@ export const RestaurantDashboard: React.FC = () => {
 
       {/* Orders List */}
       <div className="space-y-4">
-        <h2 className="text-xl font-bold text-white">Incoming Orders ({orders.length})</h2>
+        <h2 className="text-xl font-bold text-white">Incoming Kitchen Orders ({orders.length})</h2>
 
         {orders.length === 0 ? (
           <div className="glass-card p-12 text-center rounded-2xl border border-slate-800 text-slate-400 text-sm">

@@ -3,7 +3,7 @@ import { useOrders } from '../../context/OrderContext';
 import { securityService } from '../../services/securityService';
 import { DELIVERY_MODE_CONFIGS } from '../../services/deliveryLogistics';
 import { OrderStatus } from '../../types';
-import { ShieldCheck, IndianRupee, Zap, Lock, Download, Filter, FileText, CheckCircle2, RefreshCw, Printer, Search } from 'lucide-react';
+import { ShieldCheck, IndianRupee, Zap, Lock, Download, Filter, FileText, CheckCircle2, Printer, Search } from 'lucide-react';
 
 export const AdminDashboard: React.FC = () => {
   const { orders, updateOrderStatus } = useOrders();

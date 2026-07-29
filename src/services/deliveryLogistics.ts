@@ -50,7 +50,7 @@ export const DELIVERY_MODE_CONFIGS: Record<DeliveryMode, DeliveryModeConfig> = {
     title: 'Autonomous Drone Air Express',
     icon: '🚁',
     etaMinutes: 12,
-    fee: 35, // + ₹49 surge
+    fee: 35, // + ₹49 surge waiver via FLYBITE50
     maxWeightKg: 4.0,
     badge: 'DGCA AIR CORRIDOR',
     carbonFootprint: 'Air Corridor',
@@ -73,7 +73,7 @@ class DeliveryLogisticsService {
     if (weightKg > config.maxWeightKg) {
       return {
         eligible: false,
-        reason: `Cart weight (${weightKg.toFixed(2)} kg) exceeds ${config.title} max limit (${config.maxWeightKg} kg).`
+        reason: `Cart weight (${weightKg.toFixed(2)} kg) exceeds ${config.title} max payload limit (${config.maxWeightKg} kg).`
       };
     }
     return { eligible: true };
@@ -82,10 +82,10 @@ class DeliveryLogisticsService {
   public calculateETA(distanceKm: number, mode: DeliveryMode): number {
     switch (mode) {
       case 'drone_express': return 12;
-      case 'walking': return Math.ceil(distanceKm * 12 + 10); // ~3 km/h
-      case 'cycling': return Math.ceil(distanceKm * 5 + 12);  // ~12 km/h
-      case 'bike': return Math.ceil(distanceKm * 3.5 + 15);   // ~20 km/h
-      case 'car': return Math.ceil(distanceKm * 4 + 18);      // ~15 km/h in city traffic
+      case 'walking': return Math.ceil(distanceKm * 12 + 10);
+      case 'cycling': return Math.ceil(distanceKm * 5 + 12);
+      case 'bike': return Math.ceil(distanceKm * 3.5 + 15);
+      case 'car': return Math.ceil(distanceKm * 4 + 18);
       default: return 30;
     }
   }

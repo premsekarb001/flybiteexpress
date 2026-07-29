@@ -4,7 +4,6 @@ class SecurityService {
   private auditLogs: SecurityAuditLog[] = [];
 
   constructor() {
-    // Seed initial security audit log
     this.logAction(
       'System Security Engine',
       'admin',
@@ -16,22 +15,19 @@ class SecurityService {
   }
 
   public sanitizeInput(input: string): string {
-    return input.replace(/[<>'"]/g, '');
+    return input.replace(/[<>'"]/g, '').trim();
   }
 
   public validateFSSAILicense(license: string): boolean {
-    // FSSAI license numbers in India are strictly 14 digits
     const cleaned = license.trim();
     return /^\d{14}$/.test(cleaned);
   }
 
   public validateUPIVPA(vpa: string): boolean {
-    // UPI handles format e.g., name@bank, 9876543210@paytm
     return /^[\w.-]+@[\w.-]+$/.test(vpa.trim());
   }
 
   public generateLandingOtp(): string {
-    // Generate secure 4-digit OTP for drone release mechanism
     return Math.floor(1000 + Math.random() * 9000).toString();
   }
 

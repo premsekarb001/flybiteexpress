@@ -54,7 +54,6 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const landingOtp = securityService.generateLandingOtp();
     const modeConfig = deliveryLogisticsService.getModeConfig(deliveryMode);
 
-    // Assign appropriate Ground Rider or Drone
     const assignedRider = deliveryMode !== 'drone_express'
       ? MOCK_GROUND_RIDERS.find((r) => r.mode === deliveryMode) || MOCK_GROUND_RIDERS[2]
       : undefined;
@@ -117,7 +116,6 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     );
   };
 
-  // Simulate automated order progression
   useEffect(() => {
     if (!activeOrder || activeOrder.status === 'delivered' || activeOrder.status === 'cancelled') {
       return;

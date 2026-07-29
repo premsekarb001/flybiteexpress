@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MOCK_DRONES, MOCK_GROUND_RIDERS } from '../../data/mockData';
 import { DroneTelemetry, GroundRider } from '../../types';
-import { Radio, ShieldCheck, Battery, AlertTriangle, Wind, Navigation, Bike, Phone, UserCheck } from 'lucide-react';
+import { Radio, ShieldCheck, Battery, AlertTriangle, Wind, Navigation, Bike, Phone } from 'lucide-react';
 
 export const FleetControlDashboard: React.FC = () => {
   const [drones, setDrones] = useState<DroneTelemetry[]>(MOCK_DRONES);

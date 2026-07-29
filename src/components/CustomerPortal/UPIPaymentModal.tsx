@@ -26,12 +26,6 @@ export const UPIPaymentModal: React.FC<UPIPaymentModalProps> = ({ isOpen, onClos
 
   if (!isOpen) return null;
 
-  const quickVPAs = [
-    'aarav.sharma@okaxis',
-    '9876543210@paytm',
-    'sharma@ybl'
-  ];
-
   const handlePayNow = () => {
     setErrorMsg('');
 
@@ -52,7 +46,6 @@ export const UPIPaymentModal: React.FC<UPIPaymentModalProps> = ({ isOpen, onClos
       setIsProcessing(false);
       const transactionId = securityService.generateTransactionId();
 
-      // Create new active order
       createOrder(
         currentUser.id,
         currentUser.name,
@@ -79,7 +72,6 @@ export const UPIPaymentModal: React.FC<UPIPaymentModalProps> = ({ isOpen, onClos
         }
       );
 
-      // Trigger celebration confetti
       confetti({
         particleCount: 120,
         spread: 80,
@@ -157,8 +149,8 @@ export const UPIPaymentModal: React.FC<UPIPaymentModalProps> = ({ isOpen, onClos
               paymentTab === 'netbanking' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md' : 'text-slate-400 hover:text-white'
             }`}
           >
-            <QrCode className="w-3.5 h-3.5" />
-            <span>NetBank</span>
+            <Banknote className="w-3.5 h-3.5" />
+            <span>Banking</span>
           </button>
           <button
             onClick={() => setPaymentTab('cod')}
@@ -166,126 +158,62 @@ export const UPIPaymentModal: React.FC<UPIPaymentModalProps> = ({ isOpen, onClos
               paymentTab === 'cod' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md' : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Banknote className="w-3.5 h-3.5" />
+            <QrCode className="w-3.5 h-3.5" />
             <span>COD</span>
           </button>
         </div>
 
-        {/* UPI Details Content */}
+        {/* UPI Form */}
         {paymentTab === 'upi' && (
           <div className="space-y-4">
-            {/* App Selectors */}
-            <div className="grid grid-cols-4 gap-2">
-              {[
-                { id: 'gpay', name: 'Google Pay', color: 'border-blue-500/50 bg-blue-500/10 text-blue-300' },
-                { id: 'phonepe', name: 'PhonePe', color: 'border-purple-500/50 bg-purple-500/10 text-purple-300' },
-                { id: 'paytm', name: 'Paytm UPI', color: 'border-cyan-500/50 bg-cyan-500/10 text-cyan-300' },
-                { id: 'bhim', name: 'BHIM UPI', color: 'border-emerald-500/50 bg-emerald-500/10 text-emerald-300' }
-              ].map((app) => (
-                <button
-                  key={app.id}
-                  onClick={() => setSelectedUPIApp(app.id as any)}
-                  className={`p-2.5 rounded-xl border text-center text-xs font-bold transition-all ${
-                    selectedUPIApp === app.id ? `${app.color} ring-2 ring-orange-500` : 'bg-slate-900 border-slate-800 text-slate-400'
-                  }`}
-                >
-                  {app.name}
-                </button>
-              ))}
-            </div>
-
-            {/* VPA Handle Input & Quick Chips */}
-            <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-300 block">Enter Virtual Payment Address (VPA)</label>
+            <div>
+              <label className="text-xs font-bold text-slate-300 block mb-1">UPI VPA Handle</label>
               <input
                 type="text"
                 value={vpaHandle}
                 onChange={(e) => setVpaHandle(e.target.value)}
-                placeholder="username@okaxis"
+                placeholder="username@okbank"
                 className="w-full bg-slate-900 border border-slate-700 text-white text-xs rounded-xl p-3 outline-none focus:border-orange-500 font-mono"
               />
-
-              <div className="flex items-center space-x-1.5 pt-1">
-                <span className="text-[10px] text-slate-500 font-bold">Quick Select:</span>
-                {quickVPAs.map((vpa) => (
-                  <button
-                    key={vpa}
-                    onClick={() => setVpaHandle(vpa)}
-                    className="text-[10px] bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 px-2 py-0.5 rounded-md font-mono"
-                  >
-                    {vpa}
-                  </button>
-                ))}
-              </div>
             </div>
 
-            {/* UPI PIN Input */}
-            <div className="space-y-1">
-              <label className="text-xs font-bold text-slate-300 flex items-center space-x-1">
-                <Lock className="w-3.5 h-3.5 text-orange-400" />
-                <span>Enter 4-Digit UPI PIN</span>
-              </label>
+            <div>
+              <label className="text-xs font-bold text-slate-300 block mb-1">Enter 4-Digit or 6-Digit UPI PIN</label>
               <input
                 type="password"
                 maxLength={6}
                 value={upiPin}
                 onChange={(e) => setUpiPin(e.target.value)}
                 placeholder="••••"
-                className="w-full bg-slate-900 border border-slate-700 text-white text-center text-xl font-mono tracking-widest rounded-xl p-2.5 outline-none focus:border-orange-500"
+                className="w-full bg-slate-900 border border-slate-700 text-white text-center text-lg font-mono tracking-widest rounded-xl py-2.5 outline-none focus:border-orange-500"
               />
             </div>
           </div>
         )}
 
-        {paymentTab === 'card' && (
-          <div className="space-y-3 text-xs">
-            <input type="text" placeholder="Card Number (4532 •••• •••• 8842)" className="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-xl outline-none" />
-            <div className="grid grid-cols-2 gap-2">
-              <input type="text" placeholder="MM/YY" className="bg-slate-900 border border-slate-700 text-white p-3 rounded-xl outline-none" />
-              <input type="password" maxLength={3} placeholder="CVV" className="bg-slate-900 border border-slate-700 text-white p-3 rounded-xl outline-none" />
-            </div>
+        {paymentTab !== 'upi' && (
+          <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 text-center text-xs text-slate-400">
+            Selected {paymentTab.toUpperCase()} payment method. Click Authorize Payment below to proceed.
           </div>
         )}
 
-        {paymentTab === 'netbanking' && (
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            {['HDFC Bank', 'ICICI Bank', 'State Bank of India', 'Axis Bank'].map((b) => (
-              <button key={b} className="p-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 font-bold hover:border-orange-500 text-left">
-                {b}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {paymentTab === 'cod' && (
-          <div className="p-4 bg-slate-900 rounded-2xl border border-slate-800 text-xs text-slate-300 space-y-2">
-            <p className="font-bold text-white">Cash / UPI on Delivery</p>
-            <p>You can pay via UPI QR code directly to the Drone Landing Operator or Delivery Associate upon arrival.</p>
-          </div>
-        )}
-
-        {/* Error Alert */}
         {errorMsg && (
-          <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs rounded-xl font-semibold">
+          <p className="text-xs text-rose-400 font-semibold bg-rose-500/10 p-3 rounded-xl border border-rose-500/30">
             {errorMsg}
-          </div>
+          </p>
         )}
 
-        {/* Submit Pay CTA */}
         <button
           onClick={handlePayNow}
           disabled={isProcessing}
-          className="w-full bg-gradient-to-r from-orange-500 via-amber-500 to-cyan-500 hover:from-orange-600 hover:to-cyan-600 text-white font-extrabold text-sm py-3.5 rounded-2xl shadow-xl transition-all flex items-center justify-center space-x-2"
+          className="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-slate-950 font-black py-3.5 rounded-2xl shadow-xl transition-all flex items-center justify-center space-x-2 text-sm"
         >
           {isProcessing ? (
-            <span className="flex items-center space-x-2">
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              <span>Verifying UPI PIN with NPCI Bank Gateway...</span>
-            </span>
+            <span>Encrypting & Authorizing ₹{totalAmount}...</span>
           ) : (
             <>
-              <CheckCircle2 className="w-4.5 h-4.5" />
-              <span>Authorize & Launch Delivery (₹{totalAmount})</span>
+              <Lock className="w-4 h-4" />
+              <span>Authorize & Pay ₹{totalAmount}</span>
             </>
           )}
         </button>

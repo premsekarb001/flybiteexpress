@@ -32,8 +32,8 @@ interface CartContextType {
   setToastNotice: (msg: string | null) => void;
 }
 
-const CART_STORAGE_KEY = 'flybite_cart_v1';
-const RESTAURANT_STORAGE_KEY = 'flybite_restaurant_v1';
+const CART_STORAGE_KEY = 'flybite_cart_v2';
+const RESTAURANT_STORAGE_KEY = 'flybite_restaurant_v2';
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -60,7 +60,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
   const [toastNotice, setToastNotice] = useState<string | null>(null);
 
-  // Sync to localStorage
   useEffect(() => {
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
@@ -76,7 +75,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addItem = (item: MenuItem, restaurant: Restaurant) => {
     if (currentRestaurant && currentRestaurant.id !== restaurant.id) {
-      if (!window.confirm(`Your cart contains items from ${currentRestaurant.name}. Discard and start a new order from ${restaurant.name}?`)) {
+      if (!window.confirm(`Your basket contains items from ${currentRestaurant.name}. Discard and start a new order from ${restaurant.name}?`)) {
         return;
       }
       setItems([{ menuItem: item, quantity: 1, restaurantId: restaurant.id }]);
@@ -150,7 +149,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const subtotal = items.reduce((sum, item) => sum + item.menuItem.price * item.quantity, 0);
-  
+
   let discountAmount = 0;
   if (appliedCoupon === 'FLYBITE50' && subtotal >= 300) {
     discountAmount = 150;
@@ -165,7 +164,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const deliveryFee = subtotal > 0 ? modeConfig.fee : 0;
   const droneSurgeFee = subtotal > 0 && deliveryMode === 'drone_express' ? 49 : 0;
   const totalAmount = Math.max(0, discountedSubtotal + gstTax + deliveryFee + droneSurgeFee);
-  
+
   const totalWeightGrams = items.reduce((sum, item) => sum + item.menuItem.weightGrams * item.quantity, 0);
   const totalItemsCount = items.reduce((sum, item) => sum + item.quantity, 0);
 

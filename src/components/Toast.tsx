@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { CheckCircle2, AlertTriangle, Info, X } from 'lucide-react';
+import { CheckCircle2, X } from 'lucide-react';
 
 export interface ToastMessage {
   id: string;
-  type: 'success' | 'error' | 'info';
   text: string;
 }
 
@@ -14,7 +13,7 @@ interface ToastProps {
 
 export const ToastContainer: React.FC<ToastProps> = ({ toasts, onDismiss }) => {
   return (
-    <div className="fixed top-24 right-4 z-50 flex flex-col space-y-2 max-w-sm w-full pointer-events-none">
+    <div className="fixed bottom-6 right-6 z-50 space-y-2 max-w-sm pointer-events-none">
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onDismiss={onDismiss} />
       ))}
@@ -26,34 +25,17 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
   useEffect(() => {
     const timer = setTimeout(() => {
       onDismiss(toast.id);
-    }, 4000);
+    }, 3500);
     return () => clearTimeout(timer);
   }, [toast.id, onDismiss]);
 
-  const icons = {
-    success: <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />,
-    error: <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />,
-    info: <Info className="w-4 h-4 text-cyan-400 shrink-0" />
-  };
-
-  const borders = {
-    success: 'border-emerald-500/40 bg-slate-950/95 text-slate-100 glow-emerald',
-    error: 'border-rose-500/40 bg-slate-950/95 text-slate-100',
-    info: 'border-cyan-500/40 bg-slate-950/95 text-slate-100 glow-cyan'
-  };
-
   return (
-    <div
-      className={`pointer-events-auto flex items-center justify-between p-3.5 rounded-2xl border text-xs shadow-2xl transition-all duration-300 transform translate-x-0 ${borders[toast.type]}`}
-    >
-      <div className="flex items-center space-x-2.5">
-        {icons[toast.type]}
-        <span className="font-semibold">{toast.text}</span>
+    <div className="pointer-events-auto glass-panel p-3.5 rounded-2xl border border-orange-500/40 bg-slate-950/90 text-white shadow-2xl flex items-center justify-between space-x-3 text-xs animate-slide-up glow-orange">
+      <div className="flex items-center space-x-2">
+        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <span className="font-bold">{toast.text}</span>
       </div>
-      <button
-        onClick={() => onDismiss(toast.id)}
-        className="ml-3 text-slate-500 hover:text-white transition-colors"
-      >
+      <button onClick={() => onDismiss(toast.id)} className="text-slate-400 hover:text-white">
         <X className="w-3.5 h-3.5" />
       </button>
     </div>

@@ -23,7 +23,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activeRole, setActiveRole] = useState<UserRole>('customer');
   const [currentUser, setCurrentUser] = useState<User>(MOCK_USERS.customer);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true); // Logged in by default for demo ease
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   const [selectedCity, setSelectedCity] = useState<string>('Bangalore (Koramangala/Indiranagar)');
   const [otpSent, setOtpSent] = useState<boolean>(false);
   const [pendingPhone, setPendingPhone] = useState<string>('');

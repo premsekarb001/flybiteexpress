@@ -3,7 +3,7 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { deliveryLogisticsService, DELIVERY_MODE_CONFIGS } from '../../services/deliveryLogistics';
 import { DeliveryMode } from '../../types';
-import { X, Trash2, Scale, ShieldAlert, ChevronRight, ShoppingCart, Tag, CheckCircle2, MapPin, Info } from 'lucide-react';
+import { X, Trash2, Scale, ShieldAlert, ChevronRight, ShoppingCart, Tag, CheckCircle2, MapPin } from 'lucide-react';
 
 interface CartDrawerProps {
   isOpen: boolean;

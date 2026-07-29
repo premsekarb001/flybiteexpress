@@ -11,7 +11,6 @@ export const DroneRadarHUD: React.FC<DroneRadarHUDProps> = ({ drone, flightProgr
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const smoothProgressRef = useRef<number>(flightProgress);
 
-  // Smooth progress interpolation animation
   useEffect(() => {
     let animId: number;
     const animateTarget = () => {
