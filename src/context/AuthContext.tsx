@@ -98,6 +98,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = () => {
     setIsLoggedIn(false);
+    setActiveRole('customer');
+    setCurrentUser(MOCK_USERS.customer);
     securityService.logAction(
       currentUser.name,
       activeRole,

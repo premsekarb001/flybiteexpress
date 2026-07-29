@@ -111,29 +111,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCart, onOpenLiveTracker })
               </div>
             </div>
 
-            {/* Role Switcher Pills */}
-            <div className="hidden md:flex items-center space-x-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800/80 shadow-inner">
-              {(Object.keys(roleConfigs) as UserRole[]).map((role) => {
-                const config = roleConfigs[role];
-                const isActive = activeRole === role;
-                return (
-                  <button
-                    key={role}
-                    onClick={() => switchRole(role)}
-                    className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
-                      isActive
-                        ? 'bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white shadow-lg shadow-orange-500/20 scale-105'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                    }`}
-                  >
-                    <span className={isActive ? 'text-white' : 'text-slate-500'}>
-                      {config.icon}
-                    </span>
-                    <span>{config.label.split(' ')[0]}</span>
-                  </button>
-                );
-              })}
-            </div>
+            {/* Active Portal Badge (Only shown when staff/admin portal is active) */}
+            {activeRole !== 'customer' && (
+              <div className="flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 px-3.5 py-1.5 rounded-2xl text-xs font-bold text-purple-300">
+                <span className="flex items-center space-x-1.5">
+                  {roleConfigs[activeRole].icon}
+                  <span>{roleConfigs[activeRole].label}</span>
+                </span>
+                <button
+                  onClick={() => switchRole('customer')}
+                  className="ml-2 text-[10px] bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 px-2 py-0.5 rounded-lg transition-colors font-mono"
+                  title="Switch back to customer view"
+                >
+                  Exit Portal
+                </button>
+              </div>
+            )}
 
             {/* Right Action Icons & Active Order Tracker */}
             <div className="flex items-center space-x-3">
