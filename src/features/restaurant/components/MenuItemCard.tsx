@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Flame, Sparkles, Scale } from 'lucide-react';
+import { Plus, Minus, Flame, Sparkles, Scale } from 'lucide-react';
 import { MenuItem, Restaurant } from '../../../types';
 import { useCartStore } from '../../../store/useCartStore';
 import { ItemCustomizerModal } from './ItemCustomizerModal';
@@ -11,13 +11,28 @@ interface MenuItemCardProps {
 
 export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, restaurant }) => {
   const addItem = useCartStore((state) => state.addItem);
+  const cartItems = useCartStore((state) => state.items);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
+
+  // Find all cart items matching this menu item
+  const matchingCartItems = cartItems.filter((i) => i.menuItem.id === item.id);
+  const totalCartQty = matchingCartItems.reduce((sum, i) => sum + i.quantity, 0);
 
   const handleAddClick = () => {
     if (item.customizationGroups && item.customizationGroups.length > 0) {
       setIsCustomizerOpen(true);
     } else {
       addItem(item, restaurant, []);
+    }
+  };
+
+  const handleDecrement = () => {
+    if (matchingCartItems.length > 0) {
+      // Decrement the last added customization variant of this item
+      const target = matchingCartItems[matchingCartItems.length - 1];
+      updateQuantity(target.cartItemId, -1);
     }
   };
 
@@ -97,7 +112,7 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, restaurant }) 
           </div>
         </div>
 
-        {/* Right: Image & Add Button */}
+        {/* Right: Image & Add / Quantity Toggle Control */}
         <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex-shrink-0 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800">
           <img
             src={item.image}
@@ -106,14 +121,34 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, restaurant }) 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
 
-          <button
-            onClick={handleAddClick}
-            disabled={!item.isAvailable}
-            className="absolute bottom-2 left-2 right-2 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:opacity-50 text-slate-950 font-black rounded-xl text-xs transition shadow-lg flex items-center justify-center space-x-1"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>{item.customizationGroups?.length ? 'CUSTOMIZE' : 'ADD'}</span>
-          </button>
+          {totalCartQty > 0 ? (
+            <div className="absolute bottom-2 left-2 right-2 py-1 bg-amber-500 text-slate-950 rounded-xl font-black text-xs flex items-center justify-between px-2 shadow-lg border border-amber-400">
+              <button
+                onClick={handleDecrement}
+                className="p-1 hover:bg-amber-600 rounded-lg transition"
+                title="Decrease quantity"
+              >
+                <Minus className="w-3.5 h-3.5 text-slate-950" />
+              </button>
+              <span className="text-xs font-black">{totalCartQty}</span>
+              <button
+                onClick={handleAddClick}
+                className="p-1 hover:bg-amber-600 rounded-lg transition"
+                title="Increase quantity"
+              >
+                <Plus className="w-3.5 h-3.5 text-slate-950" />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleAddClick}
+              disabled={!item.isAvailable}
+              className="absolute bottom-2 left-2 right-2 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:opacity-50 text-slate-950 font-black rounded-xl text-xs transition shadow-lg flex items-center justify-center space-x-1"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>{item.customizationGroups?.length ? 'CUSTOMIZE' : 'ADD'}</span>
+            </button>
+          )}
         </div>
       </div>
 
