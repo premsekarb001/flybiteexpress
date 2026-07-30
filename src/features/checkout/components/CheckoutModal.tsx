@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, QrCode, CreditCard, Landmark, Banknote, ShieldCheck, CheckCircle, Radio, Sparkles } from 'lucide-react';
+import { X, QrCode, CreditCard, Landmark, Banknote, ShieldCheck, CheckCircle, Radio, Sparkles, FileText } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useCartStore, useCartCalculations } from '../../../store/useCartStore';
 import { useLocationStore } from '../../../store/useLocationStore';
@@ -36,6 +36,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   const [selectedUpiApp, setSelectedUpiApp] = useState<UPIApp>('gpay');
   const [vpaHandle, setVpaHandle] = useState('aarav@okaxis');
   const [cardNumber, setCardNumber] = useState('4532 •••• •••• 8892');
+  const [deliveryNotes, setDeliveryNotes] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
   if (!isOpen || !currentRestaurant) return null;
@@ -48,8 +49,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
       // Trigger confetti celebration
       try {
         confetti({
-          particleCount: 80,
-          spread: 70,
+          particleCount: 100,
+          spread: 75,
           origin: { y: 0.6 }
         });
       } catch (err) {
@@ -66,9 +67,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
         timestamp: new Date().toISOString()
       };
 
-      const fullAddress = `${currentLocation.label}, ${currentLocation.city} (Pincode: ${customPincode})`;
+      const fullAddress = `${currentLocation.label}, ${currentLocation.city} (Pincode: ${customPincode}) ${
+        deliveryNotes ? `[Notes: ${deliveryNotes}]` : ''
+      }`;
 
-      // Place order in store
+      // Place order in persistent store
       placeOrder(
         currentUser.id,
         currentUser.name,
@@ -94,7 +97,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fadeIn">
       <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-950">
@@ -103,8 +106,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-slate-100">Secure Payment Checkout</h3>
-              <p className="text-xs text-slate-400">256-Bit NPCI Encrypted Transaction Gateway</p>
+              <h3 className="text-xl font-black text-slate-100">Secure Payment &amp; Checkout</h3>
+              <p className="text-xs text-slate-400">NPCI 256-Bit SSL Encrypted Payment Gateway</p>
             </div>
           </div>
           <button
@@ -129,6 +132,21 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             <div className="text-[11px] text-slate-400 font-mono">
               Landing Pad Code: {customLandingPad}
             </div>
+          </div>
+
+          {/* Delivery Special Notes Input */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center space-x-1">
+              <FileText className="w-3.5 h-3.5" />
+              <span>Special Delivery Instructions / Gate Notes (Optional)</span>
+            </label>
+            <input
+              type="text"
+              value={deliveryNotes}
+              onChange={(e) => setDeliveryNotes(e.target.value)}
+              placeholder="e.g., Leave with security guard, call on arrival, rooftop key access"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
+            />
           </div>
 
           {/* Payment Method Selector */}
@@ -206,7 +224,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                     onClick={() => setSelectedUpiApp(app)}
                     className={`py-2 rounded-xl border text-xs font-bold uppercase transition ${
                       selectedUpiApp === app
-                        ? 'bg-amber-500 text-slate-950 border-amber-500'
+                        ? 'bg-amber-500 text-slate-950 border-amber-500 font-black'
                         : 'bg-slate-900 border-slate-800 text-slate-400'
                     }`}
                   >
@@ -274,7 +292,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                <span>Pay ₹{totalAmount} &amp; Dispatch Order</span>
+                <span>Place Order &amp; Pay ₹{totalAmount}</span>
               </>
             )}
           </button>
