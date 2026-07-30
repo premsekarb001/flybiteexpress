@@ -59,6 +59,7 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ isOpen, onCl
   if (!isOpen || !activeOrder) return null;
 
   const currentStepIndex = milestoneSteps.findIndex((s) => s.status === activeOrder.status);
+  const progressPercent = Math.round(((currentStepIndex + 1) / milestoneSteps.length) * 100);
   const minutes = Math.floor(secondsRemaining / 60);
   const seconds = secondsRemaining % 60;
 
@@ -73,7 +74,7 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ isOpen, onCl
             </div>
             <div>
               <div className="flex items-center space-x-2">
-                <h3 className="text-xl font-black text-slate-100">Live Order Progression</h3>
+                <h3 className="text-xl font-black text-slate-100">Live Flight Tracker</h3>
                 <span className="bg-amber-500/20 text-amber-400 text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-amber-500/30">
                   {activeOrder.id}
                 </span>
@@ -89,6 +90,14 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ isOpen, onCl
           >
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* Progress Percentage Bar */}
+        <div className="w-full bg-slate-950 h-2 relative">
+          <div
+            className="bg-gradient-to-r from-amber-500 to-emerald-500 h-full transition-all duration-500"
+            style={{ width: `${progressPercent}%` }}
+          />
         </div>
 
         {/* Content */}
@@ -130,9 +139,12 @@ export const LiveOrderTracker: React.FC<LiveOrderTrackerProps> = ({ isOpen, onCl
 
           {/* Step-by-Step Milestone Tracker */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              Flight Milestones &amp; Progression
-            </h4>
+            <div className="flex justify-between items-center">
+              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                Flight Milestones &amp; Progression
+              </h4>
+              <span className="text-xs font-mono font-bold text-amber-400">{progressPercent}% Complete</span>
+            </div>
 
             <div className="space-y-2">
               {milestoneSteps.map((step, idx) => {
