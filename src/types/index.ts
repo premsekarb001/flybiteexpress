@@ -24,7 +24,7 @@ export interface User {
   address?: UserAddress;
 }
 
-export type DietaryType = 'veg' | 'non-veg' | 'jain';
+export type DietaryType = 'veg' | 'non-veg' | 'jain' | 'vegan' | 'gluten-free';
 
 export interface CustomizationOption {
   id: string;

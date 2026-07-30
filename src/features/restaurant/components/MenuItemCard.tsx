@@ -34,8 +34,13 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, restaurant }) 
                   ? 'border-emerald-500 bg-emerald-500/10'
                   : item.dietary === 'jain'
                   ? 'border-purple-500 bg-purple-500/10'
+                  : item.dietary === 'vegan'
+                  ? 'border-teal-500 bg-teal-500/10'
+                  : item.dietary === 'gluten-free'
+                  ? 'border-amber-500 bg-amber-500/10'
                   : 'border-rose-500 bg-rose-500/10'
               }`}
+              title={item.dietary}
             >
               <span
                 className={`w-1.5 h-1.5 rounded-full ${
@@ -43,9 +48,17 @@ export const MenuItemCard: React.FC<MenuItemCardProps> = ({ item, restaurant }) 
                     ? 'bg-emerald-500'
                     : item.dietary === 'jain'
                     ? 'bg-purple-500'
+                    : item.dietary === 'vegan'
+                    ? 'bg-teal-400'
+                    : item.dietary === 'gluten-free'
+                    ? 'bg-amber-400'
                     : 'bg-rose-500'
                 }`}
               />
+            </span>
+
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              {item.dietary}
             </span>
 
             {item.bestseller && (

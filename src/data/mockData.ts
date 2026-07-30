@@ -252,6 +252,40 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
             ]
           }
         ]
+      },
+      {
+        id: 'm-10',
+        name: 'Shahi Royal Gulab Jamun (2 Pcs)',
+        description: 'Warm, soft khoya dumplings soaked in saffron cardamon sugar syrup.',
+        price: 120,
+        dietary: 'veg',
+        category: 'Desserts',
+        image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=500&q=80',
+        weightGrams: 200,
+        isAvailable: true,
+        bestseller: true
+      },
+      {
+        id: 'm-11',
+        name: 'Classic Hyderabadi Double Ka Meetha',
+        description: 'Golden fried bread slices soaked in saffron-infused rabri topped with pistachios and almonds.',
+        price: 150,
+        dietary: 'veg',
+        category: 'Desserts',
+        image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&q=80',
+        weightGrams: 250,
+        isAvailable: true
+      },
+      {
+        id: 'm-12',
+        name: 'Spiced Mint Masala Cooler',
+        description: 'Refreshing sparkling cooler infused with crushed mint, roasted cumin, and black salt.',
+        price: 90,
+        dietary: 'vegan',
+        category: 'Beverages',
+        image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500&q=80',
+        weightGrams: 350,
+        isAvailable: true
       }
     ]
   },
@@ -308,6 +342,30 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
         image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=500&q=80',
         weightGrams: 350,
         isAvailable: true
+      },
+      {
+        id: 'm-13',
+        name: 'Crispy Medu Vada (2 Pcs)',
+        description: 'Golden crispy lentil fritters spiced with peppercorns and ginger served with coconut sambar.',
+        price: 110,
+        dietary: 'vegan',
+        category: 'Starters',
+        image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&q=80',
+        weightGrams: 250,
+        isAvailable: true,
+        bestseller: true
+      },
+      {
+        id: 'm-14',
+        name: 'Authentic Filter Kaapi',
+        description: 'Frothy South Indian chicory-infused strong coffee brewed in brass decoction filter.',
+        price: 60,
+        dietary: 'veg',
+        category: 'Beverages',
+        image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&q=80',
+        weightGrams: 200,
+        isAvailable: true,
+        bestseller: true
       }
     ]
   },
@@ -365,6 +423,31 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
         image: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500&q=80',
         weightGrams: 650,
         isAvailable: true
+      },
+      {
+        id: 'm-15',
+        name: 'Tandoori Paneer Tikka (8 Pcs)',
+        description: 'Cubes of cottage cheese marinated in hung curd and tandoori masala roasted on skewers.',
+        price: 340,
+        dietary: 'gluten-free',
+        category: 'Starters',
+        spicyLevel: 2,
+        image: 'https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=500&q=80',
+        weightGrams: 400,
+        isAvailable: true,
+        bestseller: true
+      },
+      {
+        id: 'm-16',
+        name: 'Punjabi Sweet Kesar Lassi',
+        description: 'Thick chilled sweet yogurt blended with saffron threads and malai layer.',
+        price: 110,
+        dietary: 'veg',
+        category: 'Beverages',
+        image: 'https://images.unsplash.com/photo-1571006682858-a458b8a69288?w=500&q=80',
+        weightGrams: 350,
+        isAvailable: true,
+        bestseller: true
       }
     ]
   }

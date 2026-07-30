@@ -136,7 +136,7 @@ export const RestaurantDetail: React.FC<RestaurantDetailProps> = ({
 
           {/* Dietary Filter Buttons */}
           <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
-            {(['all', 'veg', 'non-veg', 'jain'] as const).map((type) => (
+            {(['all', 'veg', 'non-veg', 'jain', 'vegan', 'gluten-free'] as const).map((type) => (
               <button
                 key={type}
                 onClick={() => setDietaryFilter(type)}
