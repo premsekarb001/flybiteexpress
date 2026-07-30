@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { CartProvider, useCart } from './context/CartContext';
-import { OrderProvider, useOrders } from './context/OrderContext';
-import { Navbar } from './components/Navbar';
-import { RestaurantList } from './components/CustomerPortal/RestaurantList';
-import { RestaurantDetail } from './components/CustomerPortal/RestaurantDetail';
-import { CartDrawer } from './components/CustomerPortal/CartDrawer';
-import { UPIPaymentModal } from './components/CustomerPortal/UPIPaymentModal';
-import { LiveOrderTracker } from './components/DroneLogistics/LiveOrderTracker';
+import { useAuthStore } from './store/useAuthStore';
+import { useCartStore } from './store/useCartStore';
+import { useOrderStore } from './store/useOrderStore';
+import { Navbar } from './shared/ui/Navbar';
+import { RestaurantList } from './features/restaurant/components/RestaurantList';
+import { RestaurantDetail } from './features/restaurant/components/RestaurantDetail';
+import { CartDrawer } from './features/cart/components/CartDrawer';
+import { CheckoutModal } from './features/checkout/components/CheckoutModal';
+import { LiveOrderTracker } from './features/tracking/components/LiveOrderTracker';
 import { RestaurantDashboard } from './components/RestaurantPortal/RestaurantDashboard';
 import { FleetControlDashboard } from './components/DronePortal/FleetControlDashboard';
 import { AdminDashboard } from './components/AdminPortal/AdminDashboard';
-import { ToastContainer, ToastMessage } from './components/Toast';
-import { ErrorBoundary } from './components/ErrorBoundary';
+import { ToastContainer, ToastMessage } from './shared/ui/Toast';
+import { ErrorBoundary } from './shared/ui/ErrorBoundary';
 import { Restaurant } from './types';
 
 const MainAppContent: React.FC = () => {
-  const { activeRole } = useAuth();
-  const { toastNotice, setToastNotice } = useCart();
-  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
+  const activeRole = useAuthStore((state) => state.activeRole);
+  const toastNotice = useCartStore((state) => state.toastNotice);
+  const setToastNotice = useCartStore((state) => state.setToastNotice);
 
+  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [isLiveTrackerOpen, setIsLiveTrackerOpen] = useState(false);
-
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 font-sans">
       <div>
         <Navbar
           onOpenCart={() => setIsCartOpen(true)}
@@ -67,7 +67,7 @@ const MainAppContent: React.FC = () => {
         </main>
       </div>
 
-      {/* Footer */}
+      {/* Global Footer */}
       <footer className="border-t border-slate-900 bg-slate-950/90 py-8 text-center text-xs text-slate-500 space-y-2">
         <div className="flex justify-center space-x-4">
           <span>DGCA Air Corridor Verified</span>
@@ -76,13 +76,13 @@ const MainAppContent: React.FC = () => {
           <span>•</span>
           <span>NPCI 256-Bit SSL UPI</span>
         </div>
-        <p>© 2026 FlyBite Express India. Multi-Modal Ground &amp; Drone Air Express Food Delivery.</p>
+        <p>© 2026 FlyBite Express India. Multi-Modal Ground &amp; Autonomous VTOL Air Express Food Delivery.</p>
       </footer>
 
       {/* Global Toast Container */}
       <ToastContainer toasts={toasts} onDismiss={handleDismissToast} />
 
-      {/* Global Modals */}
+      {/* Global Modals & Drawers */}
       <CartDrawer
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -92,7 +92,7 @@ const MainAppContent: React.FC = () => {
         }}
       />
 
-      <UPIPaymentModal
+      <CheckoutModal
         isOpen={isPaymentOpen}
         onClose={() => setIsPaymentOpen(false)}
         onPaymentSuccess={() => {
@@ -112,13 +112,7 @@ const MainAppContent: React.FC = () => {
 export function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <CartProvider>
-          <OrderProvider>
-            <MainAppContent />
-          </OrderProvider>
-        </CartProvider>
-      </AuthProvider>
+      <MainAppContent />
     </ErrorBoundary>
   );
 }

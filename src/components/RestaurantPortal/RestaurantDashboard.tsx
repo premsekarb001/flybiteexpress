@@ -1,20 +1,21 @@
 import React from 'react';
-import { useOrders } from '../../context/OrderContext';
-import { useAuth } from '../../context/AuthContext';
+import { useOrderStore } from '../../store/useOrderStore';
+import { useAuthStore } from '../../store/useAuthStore';
 import { Utensils, Printer, CheckCircle, Zap, ShieldCheck, Clock } from 'lucide-react';
 
 export const RestaurantDashboard: React.FC = () => {
-  const { orders, updateOrderStatus } = useOrders();
-  const { currentUser } = useAuth();
+  const orders = useOrderStore((state) => state.orders);
+  const updateOrderStatus = useOrderStore((state) => state.updateOrderStatus);
+  const currentUser = useAuthStore((state) => state.currentUser);
 
   const handlePrintInvoice = (orderId: string) => {
     alert(`[FSSAI GST INVOICE] Generating tax invoice for Order #${orderId}. CGST 2.5% + SGST 2.5% applied.`);
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-fadeIn">
       {/* Kitchen Banner */}
-      <div className="glass-panel p-6 rounded-3xl border border-emerald-500/30 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-slate-900 border border-emerald-500/30 p-6 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-4 shadow-2xl">
         <div className="flex items-center space-x-4">
           <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-2xl">
             <Utensils className="w-7 h-7" />
@@ -26,11 +27,11 @@ export const RestaurantDashboard: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-3 text-xs">
-          <div className="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-xl text-slate-300 flex items-center space-x-1.5">
+          <div className="bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl text-slate-300 flex items-center space-x-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>FSSAI License #11223344556677</span>
           </div>
-          <div className="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 px-3 py-1.5 rounded-xl font-bold flex items-center space-x-1.5">
+          <div className="bg-amber-500/10 border border-amber-500/30 text-amber-400 px-3 py-1.5 rounded-xl font-bold flex items-center space-x-1.5">
             <Zap className="w-4 h-4" />
             <span>Roof Launchpad Ready</span>
           </div>
@@ -42,7 +43,7 @@ export const RestaurantDashboard: React.FC = () => {
         <h2 className="text-xl font-bold text-white">Incoming Kitchen Orders ({orders.length})</h2>
 
         {orders.length === 0 ? (
-          <div className="glass-card p-12 text-center rounded-2xl border border-slate-800 text-slate-400 text-sm">
+          <div className="bg-slate-900/60 p-12 text-center rounded-3xl border border-slate-800 text-slate-400 text-sm">
             No active kitchen orders right now. Waiting for customer requests!
           </div>
         ) : (
@@ -50,17 +51,17 @@ export const RestaurantDashboard: React.FC = () => {
             {orders.map((order) => (
               <div
                 key={order.id}
-                className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4 shadow-xl"
+                className="bg-slate-900/80 p-6 rounded-3xl border border-slate-800 space-y-4 shadow-xl"
               >
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-800 pb-3">
                   <div>
-                    <span className="text-xs font-mono text-orange-400 font-bold">#{order.id}</span>
+                    <span className="text-xs font-mono text-amber-400 font-bold">#{order.id}</span>
                     <h3 className="text-base font-bold text-white">{order.customerName} ({order.customerPhone})</h3>
                     <p className="text-xs text-slate-400">Delivery via: {order.deliveryMode.toUpperCase()}</p>
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <span className="bg-slate-900 border border-slate-700 px-3 py-1 rounded-xl text-xs text-amber-300 font-bold">
+                    <span className="bg-slate-950 border border-slate-800 px-3 py-1 rounded-xl text-xs text-amber-400 font-bold">
                       ₹{order.totalAmount} ({order.payment.method.toUpperCase()})
                     </span>
                     <button
@@ -75,10 +76,10 @@ export const RestaurantDashboard: React.FC = () => {
 
                 {/* Items */}
                 <div className="space-y-2 text-xs text-slate-300">
-                  {order.items.map((item: any, index: number) => (
+                  {order.items.map((item, index) => (
                     <div key={index} className="flex justify-between">
                       <span>{item.quantity}x {item.menuItem.name} ({item.menuItem.weightGrams}g)</span>
-                      <span className="font-bold">₹{item.menuItem.price * item.quantity}</span>
+                      <span className="font-bold">₹{item.totalPrice}</span>
                     </div>
                   ))}
                 </div>
@@ -96,16 +97,16 @@ export const RestaurantDashboard: React.FC = () => {
                         onClick={() => updateOrderStatus(order.id, 'kitchen_accepted')}
                         className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-4 py-2 rounded-xl"
                       >
-                        Accept & Start Cooking
+                        Accept &amp; Start Cooking
                       </button>
                     )}
                     {order.status === 'kitchen_accepted' && (
                       <button
                         onClick={() => updateOrderStatus(order.id, 'drone_vectoring')}
-                        className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-4 py-2 rounded-xl flex items-center space-x-1"
+                        className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-4 py-2 rounded-xl flex items-center space-x-1"
                       >
                         <Zap className="w-3.5 h-3.5" />
-                        <span>Dispatch to Drone Pad</span>
+                        <span>Dispatch to Air Corridor</span>
                       </button>
                     )}
                   </div>

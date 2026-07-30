@@ -1,11 +1,61 @@
-import { Restaurant, DroneTelemetry, User, GroundRider } from '../types';
+import { Restaurant, DroneTelemetry, User, GroundRider, UserAddress } from '../types';
 
-export const INDIAN_CITIES = [
-  'Bangalore (Koramangala/Indiranagar)',
-  'Mumbai (Bandra/Powai)',
-  'Delhi NCR (Cyber City/South Del)',
-  'Hyderabad (HITEC City/Gachibowli)',
-  'Chennai (T.Nagar/Adyar)'
+export interface PredefinedLocation {
+  id: string;
+  label: string;
+  locality: string;
+  city: string;
+  pincode: string;
+  landingPadCode: string;
+  coordinates: { lat: number; lng: number };
+}
+
+export const PREDEFINED_LOCATIONS: PredefinedLocation[] = [
+  {
+    id: 'loc-blr-1',
+    label: 'Koramangala 5th Block',
+    locality: 'Koramangala',
+    city: 'Bangalore',
+    pincode: '560095',
+    landingPadCode: 'BLR-PAD-8842',
+    coordinates: { lat: 12.9352, lng: 77.6245 }
+  },
+  {
+    id: 'loc-blr-2',
+    label: 'Indiranagar 100ft Road',
+    locality: 'Indiranagar',
+    city: 'Bangalore',
+    pincode: '560038',
+    landingPadCode: 'BLR-PAD-9921',
+    coordinates: { lat: 12.9784, lng: 77.6408 }
+  },
+  {
+    id: 'loc-blr-3',
+    label: 'Bellandur Green Glen Layout',
+    locality: 'Bellandur',
+    city: 'Bangalore',
+    pincode: '560103',
+    landingPadCode: 'BLR-PAD-7733',
+    coordinates: { lat: 12.9279, lng: 77.6751 }
+  },
+  {
+    id: 'loc-bom-1',
+    label: 'Bandra West (Pali Hill)',
+    locality: 'Bandra',
+    city: 'Mumbai',
+    pincode: '400050',
+    landingPadCode: 'BOM-PAD-1044',
+    coordinates: { lat: 19.0600, lng: 72.8339 }
+  },
+  {
+    id: 'loc-del-1',
+    label: 'DLF Cyber City Phase 2',
+    locality: 'Cyber City',
+    city: 'Gurugram / Delhi NCR',
+    pincode: '122002',
+    landingPadCode: 'DEL-PAD-3321',
+    coordinates: { lat: 28.4950, lng: 77.0895 }
+  }
 ];
 
 export const MOCK_USERS: Record<string, User> = {
@@ -17,7 +67,8 @@ export const MOCK_USERS: Record<string, User> = {
     role: 'customer',
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&q=80',
     address: {
-      street: 'Flat 402, Green Glen Layout, Bellandur',
+      street: 'Flat 402, Green Glen Layout',
+      locality: 'Bellandur',
       city: 'Bangalore',
       pincode: '560103',
       coordinates: { lat: 12.9279, lng: 77.6751 },
@@ -26,7 +77,7 @@ export const MOCK_USERS: Record<string, User> = {
   },
   restaurant: {
     id: 'usr-rest-202',
-    name: 'Chef Chef Mohammad (Paradise Biryani)',
+    name: 'Chef Mohammad (Paradise Dum Biryani)',
     email: 'kitchen@paradisebiryani.in',
     phone: '9811223344',
     role: 'restaurant'
@@ -104,7 +155,7 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
   {
     id: 'rest-1',
     name: 'Paradise Dum Biryani & Kebabs',
-    city: 'Bangalore (Koramangala/Indiranagar)',
+    city: 'Bangalore',
     locality: 'Koramangala 5th Block',
     cuisine: ['Hyderabadi', 'Biryani', 'North Indian', 'Mughlai'],
     rating: 4.8,
@@ -129,7 +180,30 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
         image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&q=80',
         weightGrams: 750,
         isAvailable: true,
-        bestseller: true
+        bestseller: true,
+        customizationGroups: [
+          {
+            id: 'g-portion',
+            name: 'Select Portion Size',
+            minSelect: 1,
+            maxSelect: 1,
+            options: [
+              { id: 'o-reg', name: 'Regular Handi (750g)', price: 0 },
+              { id: 'o-jumbo', name: 'Jumbo Family Box (1.2kg)', price: 220 }
+            ]
+          },
+          {
+            id: 'g-addons',
+            name: 'Add-ons & Extras',
+            minSelect: 0,
+            maxSelect: 3,
+            options: [
+              { id: 'o-salan', name: 'Extra Mirchi Ka Salan (200ml)', price: 40 },
+              { id: 'o-raita', name: 'Boondi Anardana Raita', price: 50 },
+              { id: 'o-egg', name: 'Extra Boiled Eggs (2 pcs)', price: 40 }
+            ]
+          }
+        ]
       },
       {
         id: 'm-2',
@@ -142,7 +216,18 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
         image: 'https://images.unsplash.com/photo-1645177628172-a94c1f96e6db?w=500&q=80',
         weightGrams: 650,
         isAvailable: true,
-        bestseller: true
+        bestseller: true,
+        customizationGroups: [
+          {
+            id: 'g-paneer-add',
+            name: 'Extra Paneer',
+            minSelect: 0,
+            maxSelect: 1,
+            options: [
+              { id: 'o-paneer-50', name: 'Extra Grilled Paneer Cubes (100g)', price: 60 }
+            ]
+          }
+        ]
       },
       {
         id: 'm-3',
@@ -154,14 +239,26 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
         spicyLevel: 2,
         image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500&q=80',
         weightGrams: 400,
-        isAvailable: true
+        isAvailable: true,
+        customizationGroups: [
+          {
+            id: 'g-dip',
+            name: 'Choice of Dip',
+            minSelect: 1,
+            maxSelect: 2,
+            options: [
+              { id: 'o-mint', name: 'Mint Coriander Chutney', price: 0 },
+              { id: 'o-garlic-mayo', name: 'Smoky Garlic Dip', price: 30 }
+            ]
+          }
+        ]
       }
     ]
   },
   {
     id: 'rest-2',
     name: 'MTR 1924 (Mavalli Tiffin Room)',
-    city: 'Bangalore (Koramangala/Indiranagar)',
+    city: 'Bangalore',
     locality: 'Indiranagar 100ft Road',
     cuisine: ['South Indian', 'Pure Veg', 'Breakfast', 'Dosa'],
     rating: 4.9,
@@ -186,7 +283,19 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
         image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&q=80',
         weightGrams: 400,
         isAvailable: true,
-        bestseller: true
+        bestseller: true,
+        customizationGroups: [
+          {
+            id: 'g-ghee',
+            name: 'Customization',
+            minSelect: 0,
+            maxSelect: 2,
+            options: [
+              { id: 'o-extra-ghee', name: 'Extra Pure Desi Ghee Dollop', price: 35 },
+              { id: 'o-podi', name: 'Gunpowder Podi Dusting', price: 25 }
+            ]
+          }
+        ]
       },
       {
         id: 'm-5',
@@ -205,7 +314,7 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
   {
     id: 'rest-3',
     name: 'Punjab Grill Shahi Rasoi',
-    city: 'Bangalore (Koramangala/Indiranagar)',
+    city: 'Bangalore',
     locality: 'HSR Layout Sector 1',
     cuisine: ['North Indian', 'Butter Chicken', 'Tandoori'],
     rating: 4.7,
@@ -230,7 +339,20 @@ export const MOCK_RESTAURANTS: Restaurant[] = [
         image: 'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=500&q=80',
         weightGrams: 700,
         isAvailable: true,
-        bestseller: true
+        bestseller: true,
+        customizationGroups: [
+          {
+            id: 'g-bread',
+            name: 'Pair with Indian Breads',
+            minSelect: 0,
+            maxSelect: 3,
+            options: [
+              { id: 'o-butter-naan', name: 'Butter Naan (2 Pcs)', price: 90 },
+              { id: 'o-garlic-naan', name: 'Garlic Butter Naan (2 Pcs)', price: 110 },
+              { id: 'o-lacha', name: 'Lacha Paratha (2 Pcs)', price: 80 }
+            ]
+          }
+        ]
       },
       {
         id: 'm-7',

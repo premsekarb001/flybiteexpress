@@ -1,5 +1,19 @@
 export type UserRole = 'customer' | 'restaurant' | 'drone_pilot' | 'admin';
 
+export interface LocationCoordinates {
+  lat: number;
+  lng: number;
+}
+
+export interface UserAddress {
+  street: string;
+  city: string;
+  pincode: string;
+  locality: string;
+  coordinates: LocationCoordinates;
+  landingPadCode?: string;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -7,16 +21,24 @@ export interface User {
   phone: string;
   role: UserRole;
   avatar?: string;
-  address?: {
-    street: string;
-    city: string;
-    pincode: string;
-    coordinates: { lat: number; lng: number };
-    landingPadCode?: string;
-  };
+  address?: UserAddress;
 }
 
 export type DietaryType = 'veg' | 'non-veg' | 'jain';
+
+export interface CustomizationOption {
+  id: string;
+  name: string;
+  price: number; // in INR
+}
+
+export interface CustomizationGroup {
+  id: string;
+  name: string;
+  minSelect: number; // 0 for optional, 1 for required single choice
+  maxSelect: number;
+  options: CustomizationOption[];
+}
 
 export interface MenuItem {
   id: string;
@@ -30,6 +52,26 @@ export interface MenuItem {
   weightGrams: number;
   isAvailable: boolean;
   bestseller?: boolean;
+  customizationGroups?: CustomizationGroup[];
+}
+
+export interface SelectedCustomization {
+  groupId: string;
+  groupName: string;
+  optionId: string;
+  optionName: string;
+  price: number;
+}
+
+export interface CartItem {
+  cartItemId: string; // unique identifier for specific item + customization combination
+  menuItem: MenuItem;
+  quantity: number;
+  restaurantId: string;
+  selectedCustomizations: SelectedCustomization[];
+  specialInstructions?: string;
+  unitPrice: number; // base price + sum of customization prices
+  totalPrice: number; // unitPrice * quantity
 }
 
 export interface Restaurant {
@@ -47,7 +89,7 @@ export interface Restaurant {
   hygieneRating: 'A+' | 'A' | 'B';
   dronePadAvailable: boolean;
   maxDronePayloadKg: number;
-  coordinates: { lat: number; lng: number };
+  coordinates: LocationCoordinates;
   menu: MenuItem[];
 }
 
@@ -80,11 +122,13 @@ export interface GroundRider {
 }
 
 export type UPIApp = 'gpay' | 'phonepe' | 'paytm' | 'bhim';
+export type PaymentMethod = 'upi' | 'card' | 'netbanking' | 'cod';
 
 export interface PaymentDetails {
-  method: 'upi' | 'card' | 'netbanking' | 'cod';
+  method: PaymentMethod;
   upiApp?: UPIApp;
   vpaHandle?: string;
+  cardLast4?: string;
   transactionId?: string;
   paidAmount: number;
   status: 'pending' | 'success' | 'failed';
@@ -116,11 +160,6 @@ export type OrderStatus =
   | 'delivered'
   | 'cancelled';
 
-export interface OrderItem {
-  menuItem: MenuItem;
-  quantity: number;
-}
-
 export interface Order {
   id: string;
   customerId: string;
@@ -128,7 +167,7 @@ export interface Order {
   customerPhone: string;
   restaurantId: string;
   restaurantName: string;
-  items: OrderItem[];
+  items: CartItem[];
   subtotal: number;
   discountAmount: number;
   gstTax: number;
@@ -137,7 +176,7 @@ export interface Order {
   totalAmount: number;
   deliveryMode: DeliveryMode;
   deliveryAddress: string;
-  deliveryCoordinates: { lat: number; lng: number };
+  deliveryCoordinates?: LocationCoordinates;
   landingOtp: string;
   status: OrderStatus;
   payment: PaymentDetails;
