@@ -9,6 +9,7 @@ import { CartDrawer } from './features/cart/components/CartDrawer';
 import { CheckoutModal } from './features/checkout/components/CheckoutModal';
 import { LiveOrderTracker } from './features/tracking/components/LiveOrderTracker';
 import { AccountModal } from './shared/ui/AccountModal';
+import { AuthModal } from './shared/ui/AuthModal';
 import { RestaurantDashboard } from './components/RestaurantPortal/RestaurantDashboard';
 import { FleetControlDashboard } from './components/DronePortal/FleetControlDashboard';
 import { AdminDashboard } from './components/AdminPortal/AdminDashboard';
@@ -28,6 +29,7 @@ const MainAppContent: React.FC = () => {
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [isLiveTrackerOpen, setIsLiveTrackerOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const MainAppContent: React.FC = () => {
             <div className="mb-6 p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-between">
               <div className="flex items-center space-x-2 text-amber-400 font-bold text-sm">
                 <Lock className="w-4 h-4" />
-                <span>Restricted Management View: {activeRole.toUpperCase()}</span>
+                <span>Protected Management View: {activeRole.toUpperCase()}</span>
               </div>
               <button
                 onClick={() => switchRole('customer')}
@@ -98,7 +100,14 @@ const MainAppContent: React.FC = () => {
           <span>NPCI 256-Bit SSL UPI</span>
         </div>
         <p>© 2026 FlyBite Express India. Multi-Modal Ground &amp; Autonomous VTOL Air Express Food Delivery.</p>
-        <div className="pt-2">
+        <div className="pt-2 flex justify-center space-x-4">
+          <button
+            onClick={() => setIsAuthOpen(true)}
+            className="text-[11px] text-amber-400 font-bold hover:underline transition"
+          >
+            Sign In / Register Account
+          </button>
+          <span>•</span>
           <button
             onClick={() => setIsAccountOpen(true)}
             className="text-[11px] text-slate-600 hover:text-slate-400 underline transition"
@@ -138,6 +147,11 @@ const MainAppContent: React.FC = () => {
       <AccountModal
         isOpen={isAccountOpen}
         onClose={() => setIsAccountOpen(false)}
+      />
+
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
       />
     </div>
   );
