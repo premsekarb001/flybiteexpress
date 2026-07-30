@@ -16,7 +16,7 @@ import { useCartStore, useCartCalculations } from '../../store/useCartStore';
 import { useLocationStore } from '../../store/useLocationStore';
 import { useOrderStore } from '../../store/useOrderStore';
 import { LocationModal } from './LocationModal';
-import { SystemHealthModal } from '../../components/SystemHealthModal';
+import { SystemHealthModal } from './SystemHealthModal';
 import { UserRole } from '../../types';
 
 interface NavbarProps {
